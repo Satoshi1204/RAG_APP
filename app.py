@@ -13,29 +13,17 @@ import google.generativeai as genai
 # .envファイルをロードして環境変数を設定
 load_dotenv()
 
-# --- Gemini API v1 エンドポイントを明示的に設定 ---
-# APIキーを環境変数から読み込み
+# --- Gemini APIキーのシンプルな設定 ---
 api_key = os.getenv("GOOGLE_API_KEY")
-
 if not api_key:
-    # .env ファイルが読み込めていないか、キーが設定されていない
-    st.error("APIキーが見つかりません。.envファイルに GOOGLE_API_KEY が正しく設定されているか確認してください。")
+    st.error("APIキーが見つかりません。Streamlit CloudのSecretsに GOOGLE_API_KEY が正しく設定されているか確認してください。")
     st.stop()
 else:
-    try:
-        # v1beta (古いAPI) ではなく v1 (新しいAPI) のエンドポイントを明示的に指定
-        genai.configure(
-            api_key=api_key,
-            client_options={'api_endpoint': 'generativelanguage.googleapis.com'}
-        )
-        st.write("Gemini API v1 エンドポイントを明示的に設定しました。") # 動作確認用
-    except TypeError:
-        st.warning("ライブラリが古いようです。デフォルト設定で接続します（エラーが再発する可能性があります）。")
-        genai.configure(api_key=api_key)
-    except Exception as e:
-        st.error(f"Gemini APIの設定に失敗しました: {e}")
-        st.stop()
-# --- 追加ブロックここまで ---
+    # v1 API強制指定などの複雑な設定を削除し、
+    # ライブラリ(>=0.5.0)のデフォルト動作（v1 API）に任せる
+    genai.configure(api_key=api_key) 
+    st.write("Gemini APIキーを設定しました。") # 動作確認用
+# --- 修正ここまで --
 
 
 # CSVファイルを読み込む関数
