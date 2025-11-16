@@ -230,6 +230,9 @@ if user_input:
 
     # 2. RAG (Retrieval-Augmented Generation) の実行
     
+    # 質問のたびに v1 設定済みの新鮮なモデルをロード
+    model = get_gemini_model()
+    
     # STEP 5 (改): 質問のたびに v1 設定済みの新鮮なモデルをロード
     model = get_gemini_model()
     
