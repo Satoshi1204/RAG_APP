@@ -105,10 +105,10 @@ def get_gemini_model():
     
     # v1 APIエンドポイントは app.py 冒頭の genai.configure() でグローバル設定済み
     
-    # 安定版の 'gemini-pro' に変更
+    # 安定版の 'gemini-pro' を、古いAPIでも認識できる 'gemini-1.0-pro' に変更
     model = genai.GenerativeModel(
-        'gemini-pro'
-    ) 
+        'gemini-1.0-pro'
+    )
     st.write("生成AIモデルのロード完了。")
     return model
 
