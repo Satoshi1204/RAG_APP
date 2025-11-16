@@ -217,19 +217,11 @@ tfidf_matrix, tfidf_vectorizer = build_tfidf_model(texts)
 embedding_model = get_embedding_model()
 embeddings = build_embedding_model(texts, embedding_model)
 
-# STEP 5: Geminiモデルをロード
-# v1betaエラーを回避するため、キャッシュ(cache_resource)の代わりに
-# session_state を使い、configure直後に生成されたモデルを保持する
-if "gemini_model" not in st.session_state:
-    st.session_state.gemini_model = get_gemini_model()
-model = st.session_state.gemini_model # session_stateからモデルを取得
 
 # STEP 6: チャット履歴の初期化と表示
 init_chat_history()
 display_chat_history()
 
-# STEP 9: ユーザー入力とRAGの実行
-user_input = st.chat_input("質問を入力してください")
 if user_input:
     # 1. ユーザーの入力をチャット履歴に追加して表示
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -238,6 +230,9 @@ if user_input:
 
     # 2. RAG (Retrieval-Augmented Generation) の実行
     
+    # STEP 5 (改): 質問のたびに v1 設定済みの新鮮なモデルをロード
+    model = get_gemini_model()
+    
     # 2a. ハイブリッド検索 (Retrieval)
     search_results = hybrid_search(
         user_input, 
@@ -245,16 +240,16 @@ if user_input:
         tfidf_matrix, 
         embedding_model, 
         embeddings, 
-        top_n=5 # まず上位5件を検索
+        top_n=5
     )
     
     # 2b. 回答生成 (Generation)
     response_text = respond_with_gemini(
         user_input, 
-        model, 
+        model, # ← 今ロードしたばかりの新鮮なモデル
         search_results, 
         texts, 
-        top_n=3 # 検索結果5件のうち、特に精度の高い上位3件をコンテキストとしてLLMに渡す
+        top_n=3
     )
     
     # 3. AIの応答をチャット履歴に追加して表示
