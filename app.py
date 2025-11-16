@@ -222,6 +222,7 @@ embeddings = build_embedding_model(texts, embedding_model)
 # STEP 6: チャット履歴の初期化と表示
 init_chat_history()
 display_chat_history()
+user_input = st.chat_input("質問を入力してください")
 
 if user_input:
     # 1. ユーザーの入力をチャット履歴に追加して表示
