@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 import google.generativeai as genai
+# Force rebuild v2 (dummy comment)
 
 # .envファイルをロードして環境変数を設定
 load_dotenv()
