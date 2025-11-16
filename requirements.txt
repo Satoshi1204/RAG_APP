@@ -8,3 +8,4 @@ python-dotenv
 # Force rebuild v3 (dummy comment to fix v1beta error)
 # Force rebuild v5
 # Force rebuild v6 (to apply new model name)
+# Force rebuild v7
